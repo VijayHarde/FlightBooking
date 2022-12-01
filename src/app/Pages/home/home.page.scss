@@ -1,0 +1,26 @@
+ion-segment {
+  --background: #54dc98;
+}
+
+ion-item {
+  margin: 2%;
+}
+
+ion-col {
+  // background-color: #135d54;
+  border: solid 1px rgb(30, 17, 17);
+  color: #fff;
+  text-align: center;
+}
+ion-row {
+  height: 40px;
+}
+ion-note{
+  margin: 2%;
+  color: red;
+}
+
+table,tr,th,td {
+  text-align: center;
+  border: 1px solid rgb(26, 17, 17);
+}

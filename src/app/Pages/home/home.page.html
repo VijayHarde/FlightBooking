@@ -1,0 +1,230 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title style="text-align: center"> Book Flight </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-card>
+    <form [formGroup]="ticketBookingForm">
+      <ion-item fill="outline">
+        <ion-icon name="person" slot="start"></ion-icon>
+        <ion-label position="floating">Name</ion-label>
+        <ion-input formControlName="name" placeholder="Enter text"></ion-input>
+      </ion-item>
+
+      <ng-container
+      *ngIf="ticketBookingForm.controls['name'].invalid &&
+      (ticketBookingForm.controls['name'].dirty || 
+      ticketBookingForm.controls['name'].touched)"
+    >
+      <ion-note *ngIf="ticketBookingForm.controls.name.errors?.['required']"
+        >Name is required
+      </ion-note>
+    </ng-container>
+
+      <ion-item fill="outline">
+        <ion-icon name="call" slot="start"></ion-icon>
+        <ion-label position="floating">Mobile</ion-label>
+        <ion-input
+          type="number"
+          formControlName="mobile"
+          placeholder="Enter text"
+        ></ion-input>
+      </ion-item>
+
+      <ng-container
+      *ngIf="ticketBookingForm.controls['mobile'].invalid &&
+      (ticketBookingForm.controls['mobile'].dirty || 
+      ticketBookingForm.controls['mobile'].touched)"
+    >
+      <ion-note *ngIf="ticketBookingForm.get('mobile')?.hasError('required')"
+        >Mobile is required
+      </ion-note>
+      <ion-note *ngIf="ticketBookingForm.get('mobile')?.hasError('pattern')"
+        >Invalid phone number
+      </ion-note>
+    </ng-container>
+
+      <ion-item fill="outline">
+        <ion-icon name="calendar" slot="start"></ion-icon>
+        <ion-input id="date" [placeholder]="ticketBookingForm.get('date')?.value"></ion-input>
+        <ion-popover #datePopover trigger="date">
+          <ng-template>
+            <ion-datetime
+            (ionChange)="addDate($event)"
+              presentation="date"
+              locale="sl-SI"
+            ></ion-datetime>
+          </ng-template>
+        </ion-popover>
+      </ion-item>
+      <!-- formControlName="date" -->
+
+      <ng-container
+        *ngIf="ticketBookingForm.controls['date'].invalid &&
+        (ticketBookingForm.controls['date'].dirty || 
+        ticketBookingForm.controls['date'].touched)"
+      >
+        <ion-note *ngIf="ticketBookingForm.controls.date.errors?.['required']"
+          >Date is required
+        </ion-note>
+      </ng-container>
+
+      <ion-item fill="outline">
+        <ion-select
+        placeholder="From"
+        interface="popover" 
+        (ionChange)="handleChange($event,'from')"
+        [multiple]="false" >
+      <ion-select-option 
+      *ngFor="let Country of coutry_list" 
+      [value]="Country">
+      {{ Country }}
+    </ion-select-option>
+    </ion-select>
+      </ion-item>
+
+      <ng-container
+        *ngIf="ticketBookingForm.controls['from'].invalid &&
+        (ticketBookingForm.controls['from'].dirty || 
+        ticketBookingForm.controls['from'].touched)"
+      >
+        <ion-note *ngIf="ticketBookingForm.controls.from.errors?.['required']"
+          >Location is required
+        </ion-note>
+      </ng-container>
+
+      <ion-item fill="outline">
+        <ion-select
+        placeholder="to"
+        interface="popover" 
+        (ionChange)="handleChange($event,'to')"
+        [multiple]="false" >
+      <ion-select-option 
+      *ngFor="let Country of coutry_list" 
+      [value]="Country">
+      {{ Country }}
+    </ion-select-option>
+    </ion-select>
+      </ion-item>
+
+      <ng-container
+        *ngIf="ticketBookingForm.controls['to'].invalid &&
+        (ticketBookingForm.controls['to'].dirty || 
+        ticketBookingForm.controls['to'].touched)"
+      >
+        <ion-note *ngIf="ticketBookingForm.controls.to.errors?.['required']"
+          >Location is required
+        </ion-note>
+      </ng-container>
+
+      <ion-item id="modal" fill="outline">
+        <ion-icon name="pricetags" slot="start"></ion-icon>
+        <ion-label position="floating">Select Sheats</ion-label>
+        <ion-input formControlName="seat" placeholder="Enter text"></ion-input>
+      </ion-item>
+
+      <ng-container
+        *ngIf="ticketBookingForm.controls['seat'].invalid &&
+        (ticketBookingForm.controls['seat'].dirty || 
+        ticketBookingForm.controls['seat'].touched)"
+      >
+        <ion-note *ngIf="ticketBookingForm.controls.seat.errors?.['required']"
+          >Select seat
+        </ion-note>
+      </ng-container>
+
+      <div style="text-align: center">
+        <ion-button 
+        (click)="submit()"
+        [disabled]="!ticketBookingForm.valid"
+        >Submit</ion-button>
+      </div>
+    </form>
+  </ion-card>
+
+  <!-- <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime id="datetime"></ion-datetime>
+    </ng-template>
+  </ion-modal> -->
+
+  <ion-modal
+    trigger="modal"
+    [initialBreakpoint]="0.75"
+    [breakpoints]="[0.75]"
+  >
+    <ng-template>
+      <ion-content>
+        <ion-grid>
+          <ion-row *ngFor="let row of seats; let rowIndex = index;">
+            <ion-col
+              size="2"
+              *ngFor="let col of row; let colIndex = index;"
+              [ngStyle]="{'background-color': (col.isAllocated==true) ? 'red' : '#ffffff'}"
+              (click)="allocateSeat(rowIndex,colIndex)"
+            >
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal #modal trigger="open-modal">
+    <ng-template>
+      <ion-content>
+        <ion-toolbar>
+          <ion-title>Flight Booked</ion-title>
+          <ion-buttons slot="end" (click)="closeModal()">
+            <ion-button color="light" >Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <ion-img style="height: 70px;margin-top:4%;" src="/assets/check-symbols.gif"></ion-img>
+
+        <div style="padding: 2%;">
+          <table style="width: 100%" [cellPadding]="10" [cellSpacing]="10">
+            <tr>
+              <th>
+                <ion-label>Booking ID</ion-label>
+              </th>
+              <td>
+                <ion-label>{{ticketBookingForm.get('bookingID')?.value}}</ion-label>
+              </td>
+            </tr>
+            <tr>
+            <th>
+              <ion-label>Date</ion-label>
+            </th>
+            <td>
+              <ion-label>{{ticketBookingForm.get('date')?.value | date:'dd-MM-YYYY'}}</ion-label>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <ion-label>Mobile</ion-label>
+            </th>
+            <td>
+              <ion-label>{{ticketBookingForm.get('mobile')?.value}}</ion-label>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <ion-label>Seat Selected</ion-label>
+            </th>
+            <td>
+              <ion-label>{{ticketBookingForm.get('seat')?.value}}</ion-label>
+            </td>
+          </tr>
+          </table>
+        </div>
+
+        <div style="text-align: center;margin-top: 3%">
+          <ion-title>Flight Booked Successfully</ion-title>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

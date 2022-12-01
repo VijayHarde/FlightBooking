@@ -1,0 +1,23 @@
+ion-toolbar {
+    text-align: center;
+    color: #002372;
+    ion-title {
+        font-weight: 700;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+}
+
+ion-row {
+    border-bottom: 1px ridge #B6B6B6;
+}
+
+ion-col {
+    text-align: center;
+    h6 {
+        // font-weight: 600;
+        color: #646464;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 600;
+        font-size: 15px;
+    }
+}
