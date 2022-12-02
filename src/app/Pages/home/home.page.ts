@@ -16,7 +16,7 @@ export class HomePage {
 
   seats:Seat[][];
   @ViewChild("modal") modal:IonModal;
-  @ViewChild("datePopover") datePopover:IonPopover
+  @ViewChild("datePopover") datePopover:IonPopover;
 
   constructor(
     private utilityService:UtilityService,
@@ -64,6 +64,8 @@ export class HomePage {
   async ngOnInit() {
     let date = this.datePipe.transform(new Date(),'dd-MM-yyyy') as string;
     let isDataAvailable = JSON.parse(await this.storage.get(date)) as bookingData;
+    // checking the data is available in the database for the current date
+    //  if it is the assigning it to the sears array otherwise assigning the empty array
     if(isDataAvailable){
       this.seats = isDataAvailable.sheets;
     }else {
@@ -75,6 +77,7 @@ export class HomePage {
     if(!this.seats[row][column].isAllocated){
       this.seats[row][column].isAllocated = true;
       let value;
+      // added this conditions becouse getting the extra comma at the starting of the string
       if(!this.ticketBookingForm.get('seat')?.value){
          value = this.seats[row][column].seatName;
       }else {
@@ -100,6 +103,7 @@ export class HomePage {
 
     async closeModal() {
       await this.modal.dismiss();
+      this.ticketBookingForm.reset();
     }
 
     async addDate(event:any){
@@ -138,9 +142,7 @@ export class HomePage {
       isDataAvailable.sheets = this.seats;
      await this.storage.set(date,JSON.stringify(isDataAvailable));
     }
-    await this.modal.present()
-    this.ticketBookingForm.reset();
-      
+    await this.modal.present()      
   }
 
 

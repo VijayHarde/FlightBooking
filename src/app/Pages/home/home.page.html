@@ -73,6 +73,7 @@
       </ng-container>
 
       <ion-item fill="outline">
+        <ion-icon style="margin-right:5px;" name="navigate"></ion-icon>
         <ion-select
         placeholder="From"
         interface="popover" 
@@ -97,6 +98,7 @@
       </ng-container>
 
       <ion-item fill="outline">
+        <ion-icon style="margin-right:5px;" name="navigate"></ion-icon>
         <ion-select
         placeholder="to"
         interface="popover" 
@@ -145,16 +147,11 @@
     </form>
   </ion-card>
 
-  <!-- <ion-modal [keepContentsMounted]="true">
-    <ng-template>
-      <ion-datetime id="datetime"></ion-datetime>
-    </ng-template>
-  </ion-modal> -->
 
   <ion-modal
     trigger="modal"
     [initialBreakpoint]="0.75"
-    [breakpoints]="[0.75]"
+    [breakpoints]="[2]"
   >
     <ng-template>
       <ion-content>

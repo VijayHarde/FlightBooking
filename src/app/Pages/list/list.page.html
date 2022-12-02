@@ -6,40 +6,60 @@
 
 <ion-content>
   
-  <ng-container>
+  <ion-item>
+      <ion-datetime-button style="margin: 2%;" datetime="datetime"></ion-datetime-button>
+  </ion-item>
 
-    <ng-container>
+    <ion-modal #modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime
+         (ionChange)="setDate($event)" 
+         id="datetime"
+         presentation="date"
+         locale="sl-SI"
+         ></ion-datetime>
+      </ng-template>
+    </ion-modal>
+
+    <ng-container *ngIf="listOfPassengers.length > 0; else empty">
       <!-- <ng-container *ngIf="reports.keys.length > 0; else empty"> -->
         <ion-row>
           <ion-col class="centerText" size="2">
             <h6 style="font-weight: 600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: 15px;" style="color:black">Sr No</h6>
           </ion-col>
           <ion-col class="centerText" size="4">
-            <h6 style="font-weight: 600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: 15px;" style="color:black">Location ID <br> No</h6>
+            <h6 style="font-weight: 600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: 15px;" style="color:black">Booking ID</h6>
           </ion-col>
           <ion-col class="centerText" size="3">
-            <h6 style="font-weight: 600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: 15px;" style="color:black">Trap Date Time</h6>
+            <h6 style="font-weight: 600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: 15px;" style="color:black">Seats</h6>
           </ion-col>
           <ion-col class="centerText" size="3">
-            <h6 style="font-weight: 600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: 15px;" style="color:black">Status</h6>
+            <h6 style="font-weight: 600;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size: 15px;" style="color:black">Mobile</h6>
           </ion-col>
         </ion-row>
 
-        <ion-row>
+        <ion-row *ngFor="let item of listOfPassengers; let i = index">
           <ion-col class="centerText" size="2">
-            <h6 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">1</h6>
+            <h6 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{{i+1}}</h6>
           </ion-col>
           <ion-col class="centerText" size="4">
-            <h6 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{{'ABC'}}</h6>
+            <h6 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{{item.BookingID}}</h6>
           </ion-col>
           <ion-col class="centerText" size="3">
-            <h6 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{{'01-12-2022'}}</h6>
+            <h6 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{{item.sheatsAllocated}}</h6>
           </ion-col>
           <ion-col class="centerText" size="3">
-            <h6 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{{'ABCD'}}</h6>
+            <h6 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+              <ion-icon name="call" (click)="CallNumber(item.mobile)"></ion-icon>
+            </h6>
           </ion-col>
         </ion-row>
     </ng-container>
-  </ng-container>
+
+    <ng-template #empty>
+      <ion-card>
+        <ion-card-title>No Data Available</ion-card-title>
+      </ion-card>
+    </ng-template>
 
 </ion-content>
