@@ -14,9 +14,9 @@ import { DatePipe } from '@angular/common';
 })
 export class HomePage {
 
-  seats:Seat[][];
-  @ViewChild("modal") modal:IonModal;
-  @ViewChild("datePopover") datePopover:IonPopover;
+  seats:Seat[][] = [];
+  @ViewChild("modal") modal:IonModal | undefined;
+  @ViewChild("datePopover") datePopover:IonPopover | undefined;
 
   constructor(
     private utilityService:UtilityService,
@@ -102,7 +102,7 @@ export class HomePage {
     }
 
     async closeModal() {
-      await this.modal.dismiss();
+      await this.modal?.dismiss();
       this.ticketBookingForm.reset();
     }
 
@@ -111,7 +111,7 @@ export class HomePage {
       this.ticketBookingForm.controls['date'].setValue(date);
       let isDataAvailable =  JSON.parse(await this.storage.get(date)) as bookingData;
       (isDataAvailable) ? this.seats = isDataAvailable.sheets : this.seats = seatJson;
-      await this.datePopover.dismiss();
+      await this.datePopover?.dismiss();
     }
 
   async submit(){
@@ -142,7 +142,7 @@ export class HomePage {
       isDataAvailable.sheets = this.seats;
      await this.storage.set(date,JSON.stringify(isDataAvailable));
     }
-    await this.modal.present()      
+    await this.modal?.present()      
   }
 
 
